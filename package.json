@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^2.8.0",
     "copy-webpack-plugin": "^5.0.2",
     "history": "^4.9.0",
     "prop-types": "^15.7.2",
