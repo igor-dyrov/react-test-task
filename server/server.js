@@ -56,10 +56,11 @@ years.forEach((year) => {
 		months: {}
 	};
 	months.forEach((month) => {
+		generated[year].months[month.name] = [];
 		for (let i = 0; i < month.numOfDays; i++) {
 			let rand = Math.random() * (18);
 			rand = Math.round(rand);
-			generated[year].months[month.name] = rand;
+			generated[year].months[month.name].push(rand);
 		}
 	});
 });

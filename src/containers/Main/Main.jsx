@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 
-import { sortDataByYears } from '../../redux/graph/graph.action.js';
+import { sortDataByYears, initDataObject } from '../../redux/graph/graph.action.js';
 import './Main.css';
 
 class Main extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			barData: [],
-		};
-	}
-	
 	componentDidMount() {
+		setTimeout(() => this.props.setSortingByYears([]), 1000);
+		const { initGraphData } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
-			.then((response) => console.log(response));
+			.then((response) => {
+				console.log(response);
+				initGraphData(response);
+			});
 	}
 	
 	render() {
-		const { barData } = this.state;
+		const { barData } = this.props;
 
 		return (
 			<div className='container'>
@@ -36,11 +34,14 @@ class Main extends React.Component {
 
 Main.propTypes = {
 	setSortingByYears: PropTypes.func,
-	barData: PropTypes.object.isRequired,
+	initGraphData: PropTypes.func,
+	barData: PropTypes.array,
 };
 
 Main.defaultProps = {
+	barData: [],
 	setSortingByYears: () => {},
+	initGraphData: () => {},
 };
 
 const mapStateToProps = (state) => {
@@ -53,6 +54,9 @@ const mapDispatchToProps = dispatch => {
 	return {
 		setSortingByYears() {
 			dispatch(sortDataByYears());
+		},
+		initGraphData(data) {
+			dispatch(initDataObject(data));
 		}
 	};
 };
