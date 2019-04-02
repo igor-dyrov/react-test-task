@@ -21,6 +21,10 @@ export const GraphActionTypes = {
 };
 
 export function graph(state = initialState, action) {
+	const graphData = {
+		labels: [],
+		datasets: [],
+	};
 	switch (action.type) {
 	case GraphActionTypes.FulfillDataObject:
 		return {
@@ -28,11 +32,6 @@ export function graph(state = initialState, action) {
 			initialObject: action.data
 		};
 	case GraphActionTypes.SetAvgByYears:
-		console.log(state);
-		const graphData = {
-			labels: [],
-			datasets: [],
-		};
 		graphData.labels = [];
 		graphData.labels.push('years');
 		Object.keys(state.initialObject).forEach((year) => {
@@ -47,7 +46,6 @@ export function graph(state = initialState, action) {
 				backgroundColor: getRandomColor()
 			});
 		});
-		console.log(graphData);
 		return {
 			...state,
 			graphData: graphData,

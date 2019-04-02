@@ -8,14 +8,11 @@ import './Main.css';
 
 class Main extends React.Component {
 	componentDidMount() {
-		setTimeout(() => this.props.setSortingByYears([]), 1000);
+		setTimeout(() => this.props.setSortingByYears(), 1000);
 		const { initGraphData } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
-			.then((response) => {
-				console.log(response);
-				initGraphData(response);
-			});
+			.then((response) => initGraphData(response));
 	}
 	
 	render() {
