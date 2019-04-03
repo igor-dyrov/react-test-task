@@ -12,3 +12,10 @@ export function sortDataByYears() {
 		type: GraphActionTypes.SetAvgByYears
 	};
 }
+
+export function sortDataByMonths(year) {
+	return {
+		type: GraphActionTypes.SetAvgByMonths,
+		year: year,
+	};
+}

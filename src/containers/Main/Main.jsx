@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 
-import { sortDataByYears, initDataObject } from '../../redux/graph/graph.action.js';
+import { sortDataByYears, initDataObject, sortDataByMonths } from '../../redux/graph/graph.action.js';
 import './Main.css';
 
 class Main extends React.Component {
 	componentDidMount() {
-		setTimeout(() => this.props.setSortingByYears(), 1000);
+		setTimeout(() => this.props.setSortingByMonths(2013), 1000);
 		const { initGraphData } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
@@ -31,6 +31,7 @@ class Main extends React.Component {
 
 Main.propTypes = {
 	setSortingByYears: PropTypes.func,
+	setSortingByMonths: PropTypes.func,
 	initGraphData: PropTypes.func,
 	barData: PropTypes.array,
 };
@@ -38,6 +39,7 @@ Main.propTypes = {
 Main.defaultProps = {
 	barData: [],
 	setSortingByYears: () => {},
+	setSortingByMonths: () => {},
 	initGraphData: () => {},
 };
 
@@ -54,6 +56,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		initGraphData(data) {
 			dispatch(initDataObject(data));
+		},
+		setSortingByMonths(year) {
+			dispatch(sortDataByMonths(year));
 		}
 	};
 };

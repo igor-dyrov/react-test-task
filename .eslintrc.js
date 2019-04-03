@@ -84,6 +84,9 @@ module.exports = {
 			"warn",
 			"tab"
 		],
+		"no-case-declarations": [
+			"off"
+		],
 		"linebreak-style": [
 			"error",
 			"unix"

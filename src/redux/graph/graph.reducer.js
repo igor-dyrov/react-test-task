@@ -17,7 +17,7 @@ export const GraphActionTypes = {
 	FulfillDataObject: 'FULFILL_DATA_OBJECT',
 	SetAvgByYears: 'SET_AVG_BY_YEARS',
 	SetAvgByMonths: 'SET_AVG_BY_MONTHS',
-	SetSortByMonth: 'SET_SORT_BY_MONTH',
+	SetSelectionByMonth: 'SET_SELECTION_BY_MONTH',
 };
 
 export function graph(state = initialState, action) {
@@ -39,13 +39,27 @@ export function graph(state = initialState, action) {
 			Object.keys(state.initialObject[year].months).forEach((month) => {
 				state.initialObject[year].months[month].forEach((val) => sum += val);
 			});
-			const avg = sum / 12 * 7;
 			graphData.datasets.push({
 				label: year,
-				data: [avg],
+				data: [sum],
 				backgroundColor: getRandomColor()
 			});
 		});
+		return {
+			...state,
+			graphData: graphData,
+		};
+	case GraphActionTypes.SetAvgByMonths:
+		const yearNumber = action.year;
+		graphData.labels = [yearNumber];
+		Object.keys(state.initialObject[yearNumber].months).forEach((month) => {
+			graphData.datasets.push({
+				label: month,
+				data: [state.initialObject[yearNumber].months[month].reduce((accumulator, currentValue) => accumulator + currentValue)],
+				backgroundColor: getRandomColor()
+			});
+		});
+		console.log(graphData);
 		return {
 			...state,
 			graphData: graphData,
