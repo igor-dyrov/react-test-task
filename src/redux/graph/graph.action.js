@@ -19,3 +19,11 @@ export function sortDataByMonths(year) {
 		year: year,
 	};
 }
+
+export function sortDataByDays(year, month) {
+	return {
+		type: GraphActionTypes.SetSelectionByMonth,
+		year: year,
+		month: month,
+	};
+}

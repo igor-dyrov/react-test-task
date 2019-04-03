@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 
-import { sortDataByYears, initDataObject, sortDataByMonths } from '../../redux/graph/graph.action.js';
+import { sortDataByYears, initDataObject, sortDataByMonths, sortDataByDays } from '../../redux/graph/graph.action.js';
 import './Main.css';
 
 class Main extends React.Component {
 	componentDidMount() {
-		setTimeout(() => this.props.setSortingByMonths(2013), 1000);
+		setTimeout(() => this.props.setSortingByDays(2013, 'February'), 1000);
 		const { initGraphData } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
@@ -32,6 +32,7 @@ class Main extends React.Component {
 Main.propTypes = {
 	setSortingByYears: PropTypes.func,
 	setSortingByMonths: PropTypes.func,
+	setSortingByDays: PropTypes.func,
 	initGraphData: PropTypes.func,
 	barData: PropTypes.array,
 };
@@ -40,6 +41,7 @@ Main.defaultProps = {
 	barData: [],
 	setSortingByYears: () => {},
 	setSortingByMonths: () => {},
+	setSortingByDays: () => {},
 	initGraphData: () => {},
 };
 
@@ -59,7 +61,10 @@ const mapDispatchToProps = dispatch => {
 		},
 		setSortingByMonths(year) {
 			dispatch(sortDataByMonths(year));
-		}
+		},
+		setSortingByDays(year, month) {
+			dispatch(sortDataByDays(year, month));
+		},
 	};
 };
 

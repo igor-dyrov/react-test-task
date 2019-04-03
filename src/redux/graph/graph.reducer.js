@@ -25,6 +25,8 @@ export function graph(state = initialState, action) {
 		labels: [],
 		datasets: [],
 	};
+	let yearNumber;
+	let monthName;
 	switch (action.type) {
 	case GraphActionTypes.FulfillDataObject:
 		return {
@@ -50,12 +52,27 @@ export function graph(state = initialState, action) {
 			graphData: graphData,
 		};
 	case GraphActionTypes.SetAvgByMonths:
-		const yearNumber = action.year;
+		yearNumber = action.year;
 		graphData.labels = [yearNumber];
 		Object.keys(state.initialObject[yearNumber].months).forEach((month) => {
 			graphData.datasets.push({
 				label: month,
 				data: [state.initialObject[yearNumber].months[month].reduce((accumulator, currentValue) => accumulator + currentValue)],
+				backgroundColor: getRandomColor()
+			});
+		});
+		return {
+			...state,
+			graphData: graphData,
+		};
+	case GraphActionTypes.SetSelectionByMonth:
+		yearNumber = action.year;
+		monthName = action.month;
+		graphData.labels = [`${monthName} ${yearNumber}`];
+		state.initialObject[yearNumber].months[monthName].forEach((value, index) => {
+			graphData.datasets.push({
+				label: index + 1,
+				data: [value],
 				backgroundColor: getRandomColor()
 			});
 		});
