@@ -37,6 +37,10 @@ class Main extends React.Component {
 			});
 	}
 
+	componentDidMount() {
+		document.getElementsByClassName('chartjs-render-monitor')[0].style.height = `${0.9 * window.innerHeight}px`;
+	}
+
 	handleSelectVisibility(event) {
 		const { setSortingByYears } = this.props;
 		const { setSortingByMonths } = this.props;
@@ -98,18 +102,18 @@ class Main extends React.Component {
 		return (
 			<main>
 				<div className='main-block__control'>
-					<select onClick={this._selectHandler}>
+					<select className='select-css' onClick={this._selectHandler}>
 						<option value='Year'>Year</option>
 						<option value='Month'>Month</option>
 						<option value='Day'>Day</option>
 					</select>
 					{yearSelectIsVisible ? (
-						<select onClick={this._yearHandler}>
+						<select className='select-css' onClick={this._yearHandler}>
 							{years.map((year) => <option key={year} value={year}>{year}</option>)}
 						</select>
 					) : null}
 					{monthSelectIsVisible ? (
-						<select onClick={this._monthHandler}>
+						<select className='select-css' onClick={this._monthHandler}>
 							{months.map((month) => <option key={month}>{month}</option>)}
 						</select>
 					) : null}
