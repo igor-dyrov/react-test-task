@@ -69,7 +69,11 @@ app.use('/api/data', (req, res) => {
 	res.status(200);
 	res.set('Access-Control-Allow-Origin', '*');
 	res.set('Content-Type', 'application/json');
-	res.write(JSON.stringify(generated));
+	res.write(JSON.stringify({
+		generated,
+		years,
+		months: months.map((month) => month.name),
+	}));
 	res.end();
 });
 

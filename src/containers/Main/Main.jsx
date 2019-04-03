@@ -17,28 +17,43 @@ class Main extends React.Component {
 	
 	render() {
 		const { barData } = this.props;
-
+		const { years } = this.props;
+		const { months } = this.props;
+		
 		return (
-			<div className='container'>
-				<h1>Hello, world!</h1>
-				<Bar
-					data={barData}
-				/>
-			</div>
+			<main>
+				<div className='main-block__control'>
+					<select>
+						{years.map((year) => <option key={year} value={year}/>)}
+					</select>
+					<select>
+						{months.map((month) => <option key={month} value={month}/>)}
+					</select>
+				</div>
+				<div className='main-block__bar'>
+					<Bar
+						data={barData}
+					/>
+				</div>
+			</main>
 		);
 	}
 }
 
 Main.propTypes = {
+	barData: PropTypes.array,
+	months: PropTypes.array,
+	years: PropTypes.array,
 	setSortingByYears: PropTypes.func,
 	setSortingByMonths: PropTypes.func,
 	setSortingByDays: PropTypes.func,
 	initGraphData: PropTypes.func,
-	barData: PropTypes.array,
 };
 
 Main.defaultProps = {
-	barData: [],
+	barData: {},
+	months: [],
+	years: [],
 	setSortingByYears: () => {},
 	setSortingByMonths: () => {},
 	setSortingByDays: () => {},
@@ -47,7 +62,9 @@ Main.defaultProps = {
 
 const mapStateToProps = (state) => {
 	return {
-		barData: state.graph.graphData
+		barData: state.graph.graphData,
+		months: state.graph.months,
+		years: state.graph.years,
 	};
 };
 

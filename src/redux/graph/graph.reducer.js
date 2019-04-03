@@ -10,7 +10,9 @@ function getRandomColor() {
 
 const initialState = {
 	initialObject: [],
-	graphData: []
+	graphData: [],
+	years: [],
+	months: [],
 };
 
 export const GraphActionTypes = {
@@ -31,7 +33,9 @@ export function graph(state = initialState, action) {
 	case GraphActionTypes.FulfillDataObject:
 		return {
 			...state,
-			initialObject: action.data
+			initialObject: action.data.generated,
+			months: action.data.months,
+			years: action.data.years,
 		};
 	case GraphActionTypes.SetAvgByYears:
 		graphData.labels = [];
@@ -39,7 +43,7 @@ export function graph(state = initialState, action) {
 		Object.keys(state.initialObject).forEach((year) => {
 			let sum = 0;
 			Object.keys(state.initialObject[year].months).forEach((month) => {
-				state.initialObject[year].months[month].forEach((val) => sum += val);
+				sum += state.initialObject[year].months[month].reduce((accumulator, currentValue) => accumulator + currentValue);
 			});
 			graphData.datasets.push({
 				label: year,
@@ -76,7 +80,6 @@ export function graph(state = initialState, action) {
 				backgroundColor: getRandomColor()
 			});
 		});
-		console.log(graphData);
 		return {
 			...state,
 			graphData: graphData,
