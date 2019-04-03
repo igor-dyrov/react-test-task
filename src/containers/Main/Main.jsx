@@ -1,10 +1,25 @@
 import * as React from 'react';
+import { compose } from '@bem-react/core';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 
-import { sortDataByYears, initDataObject, sortDataByMonths, sortDataByDays } from '../../redux/graph/graph.action.js';
+import ButtonPresenter from '../../components/Button/Button.jsx';
+import withButtonTypeLink from '../../components/Button/_type/Button_type_link';
+import withButtonThemeAction from '../../components/Button/_theme/Button_theme_dark.jsx';
+
+import {
+	sortDataByYears,
+	initDataObject,
+	sortDataByMonths,
+	sortDataByDays
+} from '../../redux/graph/graph.action.js';
 import './Main.css';
+
+const Button = compose(
+	withButtonThemeAction,
+	withButtonTypeLink,
+)(ButtonPresenter);
 
 class Main extends React.Component {
 	constructor(props) {
@@ -117,6 +132,9 @@ class Main extends React.Component {
 							{months.map((month) => <option key={month}>{month}</option>)}
 						</select>
 					) : null}
+					<Button>basic</Button>
+					<Button type='link'>Im type link</Button>
+					<Button theme='dark'>Im theme action</Button>
 				</div>
 				<div className='main-block__bar'>
 					<Bar data={barData}/>

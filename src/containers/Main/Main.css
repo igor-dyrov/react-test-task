@@ -37,17 +37,3 @@
 .select-css option {
     font-weight:normal;
 }
-
-main {
-    display: grid;
-    grid-template-rows: 0.1fr 0.9fr;
-    height: 100%;
-}
-
-.main-block__control {
-    grid-row: 1/2;
-}
-
-.main-block__bar {
-    grid-row: 2/3;
-}
