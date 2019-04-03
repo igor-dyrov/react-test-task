@@ -10,7 +10,7 @@ function getRandomColor() {
 
 const initialState = {
 	initialObject: [],
-	graphData: [],
+	graphData: {},
 	years: [],
 	months: [],
 };
