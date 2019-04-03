@@ -23,11 +23,11 @@ class Main extends React.Component {
 		return (
 			<main>
 				<div className='main-block__control'>
-					<select>
-						{years.map((year) => <option key={year} value={year}/>)}
+					<select className='main-block__control-select'>
+						{years.map((year) => <option key={year}>{year}</option>)}
 					</select>
 					<select>
-						{months.map((month) => <option key={month} value={month}/>)}
+						{months.map((month) => <option key={month}>{month}</option>)}
 					</select>
 				</div>
 				<div className='main-block__bar'>
