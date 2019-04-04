@@ -16,6 +16,7 @@ import {
 	sortDataByMonths,
 	sortDataByDays
 } from '../../redux/graph/graph.action.js';
+import { getMonths, getBarData, getYears } from '../../redux/graph/graph.selector.js';
 import './Main.css';
 
 const Button = compose(
@@ -171,9 +172,9 @@ Main.defaultProps = {
 
 const mapStateToProps = (state) => {
 	return {
-		barData: state.graph.graphData,
-		months: state.graph.months,
-		years: state.graph.years,
+		barData: getBarData(state),
+		months: getMonths(state),
+		years: getYears(state),
 	};
 };
 
