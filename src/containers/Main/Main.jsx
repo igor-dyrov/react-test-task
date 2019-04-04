@@ -38,22 +38,20 @@ class Main extends React.Component {
 		this._yearHandler = this.handleYearSelecting.bind(this);
 		this._monthHandler = this.handleMonthSelecting.bind(this);
 		this._modeHandler = this.handleModeVisibility.bind(this);
-		this._reGenerateHandler = this.reGenerateData.bind(this);
+		this._generatingHandler = this.reGenerateData.bind(this);
 	}
 
 	componentWillMount() {
+		const { setSortingByYears } = this.props;
 		this.reGenerateData();
+		setSortingByYears();
 	}
 	
 	reGenerateData() {
 		const { initGraphData } = this.props;
-		const { setSortingByYears } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
-			.then((response) => {
-				initGraphData(response);
-				setSortingByYears();
-			});
+			.then((response) => initGraphData(response));
 	}
 	
 	handleModeVisibility(event) {
@@ -120,7 +118,7 @@ class Main extends React.Component {
 						) : null}
 					</div>
 					<div className={cnMain('buttons')}>
-						<Button theme='action'>Regenerate</Button>
+						<Button theme='action' onClick={this._generatingHandler}>Regenerate</Button>
 						<Button type='link' href='https://github.com/igor-dyrov'>My GitHub</Button>
 					</div>
 				</div>

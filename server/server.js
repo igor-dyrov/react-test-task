@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 
-const generated = {};
+let generated = {};
 
 const months = [
 	{
@@ -51,21 +51,21 @@ const months = [
 
 const years = [2012, 2013, 2014, 2015, 2016, 2017, 2018];
 
-years.forEach((year) => {
-	generated[year] = {
-		months: {}
-	};
-	months.forEach((month) => {
-		generated[year].months[month.name] = [];
-		for (let i = 0; i < month.numOfDays; i++) {
-			let rand = Math.random() * (18);
-			rand = Math.round(rand);
-			generated[year].months[month.name].push(rand);
-		}
-	});
-});
-
 app.use('/api/data', (req, res) => {
+	generated = {};
+	years.forEach((year) => {
+		generated[year] = {
+			months: {}
+		};
+		months.forEach((month) => {
+			generated[year].months[month.name] = [];
+			for (let i = 0; i < month.numOfDays; i++) {
+				let rand = Math.random() * (18);
+				rand = Math.round(rand);
+				generated[year].months[month.name].push(rand);
+			}
+		});
+	});
 	res.status(200);
 	res.set('Access-Control-Allow-Origin', '*');
 	res.set('Content-Type', 'application/json');
