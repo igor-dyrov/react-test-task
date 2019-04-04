@@ -1,10 +1,27 @@
 import * as React from 'react';
+import { compose } from '@bem-react/core';
+import { cn } from '@bem-react/classname';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 
-import { sortDataByYears, initDataObject, sortDataByMonths, sortDataByDays } from '../../redux/graph/graph.action.js';
+import ButtonPresenter from '../../components/Button/Button.jsx';
+import withButtonTypeLink from '../../components/Button/_type/Button_type_link';
+import withButtonThemeAction from '../../components/Button/_theme/Button_theme_action.jsx';
+
+import Select from '../../components/Select/Select.jsx';
+import {
+	sortDataByYears,
+	initDataObject,
+	sortDataByMonths,
+	sortDataByDays
+} from '../../redux/graph/graph.action.js';
 import './Main.css';
+
+const Button = compose(
+	withButtonThemeAction,
+	withButtonTypeLink,
+)(ButtonPresenter);
 
 class Main extends React.Component {
 	constructor(props) {
@@ -35,10 +52,6 @@ class Main extends React.Component {
 				});
 				setSortingByYears();
 			});
-	}
-
-	componentDidMount() {
-		document.getElementsByClassName('chartjs-render-monitor')[0].style.height = `${0.9 * window.innerHeight}px`;
 	}
 
 	handleSelectVisibility(event) {
@@ -98,27 +111,37 @@ class Main extends React.Component {
 		const { months } = this.props;
 		const { yearSelectIsVisible } = this.state;
 		const { monthSelectIsVisible } = this.state;
-
+		const cnMain = cn('main');
 		return (
 			<main>
-				<div className='main-block__control'>
-					<select className='select-css' onClick={this._selectHandler}>
-						<option value='Year'>Year</option>
-						<option value='Month'>Month</option>
-						<option value='Day'>Day</option>
-					</select>
-					{yearSelectIsVisible ? (
-						<select className='select-css' onClick={this._yearHandler}>
-							{years.map((year) => <option key={year} value={year}>{year}</option>)}
-						</select>
-					) : null}
-					{monthSelectIsVisible ? (
-						<select className='select-css' onClick={this._monthHandler}>
-							{months.map((month) => <option key={month}>{month}</option>)}
-						</select>
-					) : null}
+				<div className={cnMain('control')}>
+					<div className={cnMain('selects')}>
+						<Select
+							className={cnMain('select', { value: 'mode' })}
+							options={['Year', 'Month', 'Day']}
+							onClick={this._selectHandler}
+						/>
+						{yearSelectIsVisible ? (
+							<Select
+								className={cnMain('select', { value: 'year' })}
+								options={years}
+								onClick={this._yearHandler}
+							/>
+						) : null}
+						{monthSelectIsVisible ? (
+							<Select
+								className={cnMain('select', { value: 'month' })}
+								options={months}
+								onClick={this._monthHandler}
+							/>
+						) : null}
+					</div>
+					<div className={cnMain('buttons')}>
+						<Button theme='action'>Regenerate</Button>
+						<Button type='link' href='https://github.com/igor-dyrov'>My GitHub</Button>
+					</div>
 				</div>
-				<div className='main-block__bar'>
+				<div className={cnMain('bar')}>
 					<Bar data={barData}/>
 				</div>
 			</main>
