@@ -16,6 +16,15 @@ import {
 	sortDataByMonths,
 	sortDataByDays
 } from '../../redux/graph/graph.action.js';
+import {
+	getMonths,
+	getBarData,
+	getYears,
+	getMode,
+	getSelectedMonth,
+	getSelectedYear
+} from '../../redux/graph/graph.selector.js';
+import { yearSelectorIsVisible, monthSelectorIsVisible } from './main.selector.js';
 import './Main.css';
 
 const Button = compose(
@@ -28,55 +37,36 @@ class Main extends React.Component {
 		super(props);
 		this._yearHandler = this.handleYearSelecting.bind(this);
 		this._monthHandler = this.handleMonthSelecting.bind(this);
-		this._selectHandler = this.handleSelectVisibility.bind(this);
-		this.state = {
-			yearSelectIsVisible: false,
-			monthSelectIsVisible: false,
-			selectedYear: '',
-			selectedMonth: '',
-		};
+		this._modeHandler = this.handleModeVisibility.bind(this);
+		this._reGenerateHandler = this.reGenerateData.bind(this);
 	}
 
 	componentWillMount() {
+		this.reGenerateData();
+	}
+	
+	reGenerateData() {
 		const { initGraphData } = this.props;
 		const { setSortingByYears } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
 			.then((response) => {
 				initGraphData(response);
-				const { years } = this.props;
-				const { months } = this.props;
-				this.setState({
-					selectedYear: years[0],
-					selectedMonth: months[0],
-				});
 				setSortingByYears();
 			});
 	}
-
-	handleSelectVisibility(event) {
+	
+	handleModeVisibility(event) {
 		const { setSortingByYears } = this.props;
 		const { setSortingByMonths } = this.props;
 		const { setSortingByDays } = this.props;
-		const { selectedYear } = this.state;
-		const { selectedMonth } = this.state;
+		const { selectedYear } = this.props;
+		const { selectedMonth } = this.props;
 		if (event.target.value === 'Month') {
-			this.setState({
-				yearSelectIsVisible: true,
-				monthSelectIsVisible: false,
-			});
 			setSortingByMonths(selectedYear);
 		} else if (event.target.value === 'Day') {
-			this.setState({
-				yearSelectIsVisible: true,
-				monthSelectIsVisible: true,
-			});
-			setSortingByDays(selectedYear, selectedMonth);
+			setSortingByDays(+selectedYear, selectedMonth);
 		} else {
-			this.setState({
-				yearSelectIsVisible: false,
-				monthSelectIsVisible: false,
-			});
 			setSortingByYears();
 		}
 	}
@@ -84,33 +74,26 @@ class Main extends React.Component {
 	handleYearSelecting(event) {
 		const { setSortingByMonths } = this.props;
 		const { setSortingByDays } = this.props;
-		const { monthSelectIsVisible } = this.state;
-		const { selectedMonth } = this.state;
-		this.setState({
-			selectedYear: event.target.value
-		});
-		if (monthSelectIsVisible) {
-			setSortingByDays(event.target.value, selectedMonth);
+		const { selectedMonth } = this.props;
+		if (monthSelectorIsVisible(this.props)) {
+			setSortingByDays(+event.target.value, selectedMonth);
 		} else {
-			setSortingByMonths(event.target.value);
+			setSortingByMonths(+event.target.value);
 		}
 	}
 
 	handleMonthSelecting(event) {
 		const { setSortingByDays } = this.props;
-		const { selectedYear } = this.state;
-		this.setState({
-			selectedMonth: event.target.value
-		});
-		setSortingByDays(selectedYear, event.target.value);
+		const { selectedYear } = this.props;
+		setSortingByDays(+selectedYear, event.target.value);
 	}
 
 	render() {
 		const { barData } = this.props;
 		const { years } = this.props;
 		const { months } = this.props;
-		const { yearSelectIsVisible } = this.state;
-		const { monthSelectIsVisible } = this.state;
+		const yearSelectIsVisible = yearSelectorIsVisible(this.props);
+		const monthSelectIsVisible = monthSelectorIsVisible(this.props);
 		const cnMain = cn('main');
 		return (
 			<main>
@@ -119,7 +102,7 @@ class Main extends React.Component {
 						<Select
 							className={cnMain('select', { value: 'mode' })}
 							options={['Year', 'Month', 'Day']}
-							onClick={this._selectHandler}
+							onClick={this._modeHandler}
 						/>
 						{yearSelectIsVisible ? (
 							<Select
@@ -150,34 +133,29 @@ class Main extends React.Component {
 }
 
 Main.propTypes = {
-	barData: PropTypes.object,
-	months: PropTypes.array,
-	years: PropTypes.array,
-	setSortingByYears: PropTypes.func,
-	setSortingByMonths: PropTypes.func,
-	setSortingByDays: PropTypes.func,
-	initGraphData: PropTypes.func,
-};
-
-Main.defaultProps = {
-	barData: {},
-	months: [],
-	years: [],
-	setSortingByYears: () => {},
-	setSortingByMonths: () => {},
-	setSortingByDays: () => {},
-	initGraphData: () => {},
+	barData: PropTypes.object.isRequired,
+	months: PropTypes.array.isRequired,
+	years: PropTypes.array.isRequired,
+	setSortingByYears: PropTypes.func.isRequired,
+	setSortingByMonths: PropTypes.func.isRequired,
+	setSortingByDays: PropTypes.func.isRequired,
+	initGraphData: PropTypes.func.isRequired,
+	selectedYear: PropTypes.number.isRequired,
+	selectedMonth: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
 	return {
-		barData: state.graph.graphData,
-		months: state.graph.months,
-		years: state.graph.years,
+		barData: getBarData(state),
+		months: getMonths(state),
+		years: getYears(state),
+		mode: getMode(state),
+		selectedYear: getSelectedYear(state),
+		selectedMonth: getSelectedMonth(state),
 	};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
 	return {
 		setSortingByYears() {
 			dispatch(sortDataByYears());
