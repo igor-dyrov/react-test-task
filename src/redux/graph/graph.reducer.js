@@ -1,18 +1,10 @@
-function getRandomColor() {
-	const letters = '0123456789ABCDEF';
-	let color = '#';
-	for (let i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-}
-
-
 const initialState = {
 	initialObject: [],
-	graphData: {},
 	years: [],
 	months: [],
+	mode: 'YEARS',
+	selectedYear: 2012,
+	selectedMonth: 'January',
 };
 
 export const GraphActionTypes = {
@@ -22,13 +14,13 @@ export const GraphActionTypes = {
 	SetSelectionByMonth: 'SET_SELECTION_BY_MONTH',
 };
 
+export const GraphModeTypes = {
+	Years: 'YEARS',
+	Months: 'MONTHS',
+	Days: 'DAYS',
+};
+
 export function graph(state = initialState, action) {
-	const graphData = {
-		labels: [],
-		datasets: [],
-	};
-	let yearNumber;
-	let monthName;
 	switch (action.type) {
 	case GraphActionTypes.FulfillDataObject:
 		return {
@@ -38,51 +30,22 @@ export function graph(state = initialState, action) {
 			years: action.data.years,
 		};
 	case GraphActionTypes.SetAvgByYears:
-		graphData.labels = [];
-		graphData.labels.push('years');
-		Object.keys(state.initialObject).forEach((year) => {
-			let sum = 0;
-			Object.keys(state.initialObject[year].months).forEach((month) => {
-				sum += state.initialObject[year].months[month].reduce((accumulator, currentValue) => accumulator + currentValue);
-			});
-			graphData.datasets.push({
-				label: year,
-				data: [sum],
-				backgroundColor: getRandomColor()
-			});
-		});
 		return {
 			...state,
-			graphData: graphData,
+			mode: GraphModeTypes.Years,
 		};
 	case GraphActionTypes.SetAvgByMonths:
-		yearNumber = action.year;
-		graphData.labels = [yearNumber];
-		Object.keys(state.initialObject[yearNumber].months).forEach((month) => {
-			graphData.datasets.push({
-				label: month,
-				data: [state.initialObject[yearNumber].months[month].reduce((accumulator, currentValue) => accumulator + currentValue)],
-				backgroundColor: getRandomColor()
-			});
-		});
 		return {
 			...state,
-			graphData: graphData,
+			selectedYear: action.year,
+			mode: GraphModeTypes.Months
 		};
 	case GraphActionTypes.SetSelectionByMonth:
-		yearNumber = action.year;
-		monthName = action.month;
-		graphData.labels = [`${monthName} ${yearNumber}`];
-		state.initialObject[yearNumber].months[monthName].forEach((value, index) => {
-			graphData.datasets.push({
-				label: index + 1,
-				data: [value],
-				backgroundColor: getRandomColor()
-			});
-		});
 		return {
 			...state,
-			graphData: graphData,
+			selectedYear: action.year,
+			selectedMonth: action.month,
+			mode: GraphModeTypes.Days,
 		};
 	default:
 		return state;

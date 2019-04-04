@@ -6,6 +6,6 @@ import './Button_type_link.css';
 
 export default withBemMod(cnButton(), { type: 'link' }, (Button) => (
 	(props) => (
-		<Button {...props} TagName='a' className='first after'/>
+		<Button {...props} TagName='a' className='first after' target='_blank'/>
 	)
 ));

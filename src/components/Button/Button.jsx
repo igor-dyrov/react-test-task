@@ -8,9 +8,11 @@ export default function Button(props) {
 	const { className } = props;
 	const { TagName } = props;
 	const { href } = props;
+	const { onClick } = props;
+	const { target } = props;
 	
 	return (
-		<TagName className={cnButton({}, [className])} href={href} target='_blank'>
+		<TagName className={cnButton({}, [className])} href={href} onClick={onClick} target={ target }>
 			{children}
 		</TagName>
 	);
@@ -21,6 +23,8 @@ Button.propTypes = {
 	TagName: PropTypes.string,
 	children: PropTypes.string,
 	href: PropTypes.string,
+	onClick: PropTypes.func,
+	target: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -28,4 +32,6 @@ Button.defaultProps = {
 	TagName: 'div',
 	children: '',
 	href: '',
+	onClick: () => {},
+	target: ''
 };
