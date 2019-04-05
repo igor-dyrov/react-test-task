@@ -1,12 +1,3 @@
-const initialState = {
-	initialObject: [],
-	years: [],
-	months: [],
-	mode: 'YEARS',
-	selectedYear: 2012,
-	selectedMonth: 'January',
-};
-
 export const GraphActionTypes = {
 	FulfillDataObject: 'FULFILL_DATA_OBJECT',
 	SetAvgByYears: 'SET_AVG_BY_YEARS',
@@ -18,6 +9,15 @@ export const GraphModeTypes = {
 	Years: 'YEARS',
 	Months: 'MONTHS',
 	Days: 'DAYS',
+};
+
+const initialState = {
+	initialObject: [],
+	years: [],
+	months: [],
+	mode: GraphModeTypes.Years,
+	selectedYear: 2012,
+	selectedMonth: 'January',
 };
 
 export function graph(state = initialState, action) {

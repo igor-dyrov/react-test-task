@@ -166,7 +166,7 @@ const makeStateToProps = () => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setSortingByYears: () => dispatch(sortDataByYears),
+		setSortingByYears: () => dispatch(sortDataByYears()),
 		initGraphData: (data) => dispatch(initDataObject(data)),
 		setSortingByMonths: (year) => dispatch(sortDataByMonths(year)),
 		setSortingByDays: (year, month) => dispatch(sortDataByDays(year, month)),
