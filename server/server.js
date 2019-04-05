@@ -1,4 +1,5 @@
 const express = require('express');
+const lodash = require('lodash');
 
 const app = express();
 
@@ -27,10 +28,12 @@ const months = [
 	{
 		name: 'June',
 		numOfDays: 30
-	}, {
+	},
+	{
 		name: 'July',
 		numOfDays: 31
-	}, {
+	},
+	{
 		name: 'August',
 		numOfDays: 31
 	},
@@ -48,9 +51,10 @@ const months = [
 	}, {
 		name: 'December',
 		numOfDays: 31
-	}];
+	}
+];
 
-const years = [2012, 2013, 2014, 2015, 2016, 2017, 2018];
+const years = lodash.range(2012, 2019);
 
 app.use('/api/data', (req, res) => {
 	generated = {};

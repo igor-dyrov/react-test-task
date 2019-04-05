@@ -2,12 +2,12 @@ import { createSelector } from 'reselect';
 
 import { GraphModeTypes } from './graph.reducer.js';
 
+const lodash = require('lodash');
+
 function getRandomColor() {
 	const letters = '0123456789ABCDEF';
 	let color = '#';
-	for (let i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
+	lodash.range(6).forEach(() => color += letters[Math.floor(Math.random() * 16)]);
 	return color;
 }
 
@@ -32,9 +32,8 @@ export const makeGetBarData = () => createSelector(
 			graphData.labels = [];
 			graphData.labels.push('years');
 			Object.keys(data).forEach((year) => {
-				let sum = 0;
-				Object.keys(data[year].months).forEach((month) => {
-					sum += data[year].months[month].reduce((accumulator, currentValue) => accumulator + currentValue);
+				const sum = Object.keys(data[year].months).reduce((curr, month) => {
+					return data[year].months[month].reduce((accumulator, currentValue) => accumulator + currentValue);
 				});
 				graphData.datasets.push({
 					label: year,
@@ -45,22 +44,22 @@ export const makeGetBarData = () => createSelector(
 			break;
 		case GraphModeTypes.Months:
 			graphData.labels = [yearNumber];
-			Object.keys(data[yearNumber].months).forEach((month) => {
-				graphData.datasets.push({
+			graphData.datasets = Object.keys(data[yearNumber].months).map((month) => {
+				return {
 					label: month,
 					data: [data[yearNumber].months[month].reduce((accumulator, currentValue) => accumulator + currentValue)],
 					backgroundColor: getRandomColor()
-				});
+				};
 			});
 			break;
 		case GraphModeTypes.Days:
 			graphData.labels = [`${monthName} ${yearNumber}`];
-			data[yearNumber].months[monthName].forEach((value, index) => {
-				graphData.datasets.push({
+			graphData.datasets = data[yearNumber].months[monthName].map((value, index) => {
+				return {
 					label: index + 1,
 					data: [value],
 					backgroundColor: getRandomColor()
-				});
+				};
 			});
 			break;
 		default:
