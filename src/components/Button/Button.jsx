@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import cnButton from './index';
 
 export default function Button(props) {
-	const { children } = props;
-	const { className } = props;
-	const { TagName } = props;
-	const { href } = props;
-	const { onClick } = props;
-	const { target } = props;
+	const {
+		children,
+		className,
+		onClick,
+		TagName,
+		href,
+		target,
+	} = props;
 	
 	return (
 		<TagName className={cnButton({}, [className])} href={href} onClick={onClick} target={target}>

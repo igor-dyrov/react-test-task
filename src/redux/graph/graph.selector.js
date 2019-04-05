@@ -11,11 +11,11 @@ function getRandomColor() {
 	return color;
 }
 
-export const getMonths = createSelector((state) => state.graph.months, (months) => months);
+export const makeGetMonths = () => createSelector((state) => state.graph.months, (months) => months);
 
-export const getYears = createSelector((state) => state.graph.years, (years) => years);
+export const makeGetYears = () => createSelector((state) => state.graph.years, (years) => years);
 
-export const getBarData = createSelector(
+export const makeGetBarData = () => createSelector(
 	[
 		(state) => state.graph.initialObject,
 		(state) => state.graph.mode,
@@ -71,8 +71,8 @@ export const getBarData = createSelector(
 	}
 );
 
-export const getMode = createSelector((state) => state.graph.mode, (mode) => mode);
+export const makeGetMode = () => createSelector((state) => state.graph.mode, (mode) => mode);
 
-export const getSelectedYear = createSelector((state) => state.graph.selectedYear, (selected) => selected);
+export const makeGetSelectedYear = () => createSelector((state) => state.graph.selectedYear, (selected) => selected);
 
-export const getSelectedMonth = createSelector((state) => state.graph.selectedMonth, (selected) => selected);
+export const makeGetSelectedMonth = () => createSelector((state) => state.graph.selectedMonth, (selected) => selected);
