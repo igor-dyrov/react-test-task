@@ -16,6 +16,7 @@ import {
 	sortDataByMonths,
 	sortDataByDays
 } from '../../redux/graph/graph.action.js';
+
 import {
 	getMonths,
 	getBarData,
@@ -24,6 +25,7 @@ import {
 	getSelectedMonth,
 	getSelectedYear
 } from '../../redux/graph/graph.selector.js';
+
 import { yearSelectorIsVisible, monthSelectorIsVisible } from './main.selector.js';
 import './Main.css';
 
@@ -33,33 +35,27 @@ const Button = compose(
 )(ButtonPresenter);
 
 class Main extends React.Component {
-	constructor(props) {
-		super(props);
-		this._yearHandler = this.handleYearSelecting.bind(this);
-		this._monthHandler = this.handleMonthSelecting.bind(this);
-		this._modeHandler = this.handleModeVisibility.bind(this);
-		this._generatingHandler = this.reGenerateData.bind(this);
-	}
-
 	componentWillMount() {
 		const { setSortingByYears } = this.props;
 		this.reGenerateData();
 		setSortingByYears();
 	}
 	
-	reGenerateData() {
+	reGenerateData = () => {
 		const { initGraphData } = this.props;
 		fetch('http://localhost:8000/api/data')
 			.then((response) => response.json())
 			.then((response) => initGraphData(response));
-	}
+	};
 	
-	handleModeVisibility(event) {
-		const { setSortingByYears } = this.props;
-		const { setSortingByMonths } = this.props;
-		const { setSortingByDays } = this.props;
-		const { selectedYear } = this.props;
-		const { selectedMonth } = this.props;
+	handleModeSelecting = (event) => {
+		const {
+			setSortingByYears,
+			setSortingByDays,
+			setSortingByMonths,
+			selectedMonth,
+			selectedYear
+		} = this.props;
 		if (event.target.value === 'Month') {
 			setSortingByMonths(selectedYear);
 		} else if (event.target.value === 'Day') {
@@ -67,29 +63,35 @@ class Main extends React.Component {
 		} else {
 			setSortingByYears();
 		}
-	}
+	};
 
-	handleYearSelecting(event) {
-		const { setSortingByMonths } = this.props;
-		const { setSortingByDays } = this.props;
-		const { selectedMonth } = this.props;
+	handleYearSelecting = (event) => {
+		const {
+			setSortingByMonths,
+			setSortingByDays,
+			selectedMonth,
+		} = this.props;
 		if (monthSelectorIsVisible(this.props)) {
 			setSortingByDays(+event.target.value, selectedMonth);
 		} else {
 			setSortingByMonths(+event.target.value);
 		}
-	}
+	};
 
-	handleMonthSelecting(event) {
-		const { setSortingByDays } = this.props;
-		const { selectedYear } = this.props;
+	handleMonthSelecting = (event) => {
+		const {
+			setSortingByDays,
+			selectedYear,
+		} = this.props;
 		setSortingByDays(+selectedYear, event.target.value);
-	}
+	};
 
 	render() {
-		const { barData } = this.props;
-		const { years } = this.props;
-		const { months } = this.props;
+		const {
+			barData,
+			years,
+			months,
+		} = this.props;
 		const yearSelectIsVisible = yearSelectorIsVisible(this.props);
 		const monthSelectIsVisible = monthSelectorIsVisible(this.props);
 		const cnMain = cn('main');
@@ -100,25 +102,25 @@ class Main extends React.Component {
 						<Select
 							className={cnMain('select', { value: 'mode' })}
 							options={['Year', 'Month', 'Day']}
-							onClick={this._modeHandler}
+							onClick={this.handleModeSelecting}
 						/>
 						{yearSelectIsVisible ? (
 							<Select
 								className={cnMain('select', { value: 'year' })}
 								options={years}
-								onClick={this._yearHandler}
+								onClick={this.handleYearSelecting}
 							/>
 						) : null}
 						{monthSelectIsVisible ? (
 							<Select
 								className={cnMain('select', { value: 'month' })}
 								options={months}
-								onClick={this._monthHandler}
+								onClick={this.handleMonthSelecting}
 							/>
 						) : null}
 					</div>
 					<div className={cnMain('buttons')}>
-						<Button theme='action' onClick={this._generatingHandler}>Regenerate</Button>
+						<Button theme='action' onClick={this.reGenerateData}>Regenerate</Button>
 						<Button type='link' href='https://github.com/igor-dyrov'>My GitHub</Button>
 					</div>
 				</div>
@@ -155,18 +157,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setSortingByYears() {
-			dispatch(sortDataByYears());
-		},
-		initGraphData(data) {
-			dispatch(initDataObject(data));
-		},
-		setSortingByMonths(year) {
-			dispatch(sortDataByMonths(year));
-		},
-		setSortingByDays(year, month) {
-			dispatch(sortDataByDays(year, month));
-		},
+		setSortingByYears: () => dispatch(sortDataByYears),
+		initGraphData: (data) => dispatch(initDataObject(data)),
+		setSortingByMonths: (year) => dispatch(sortDataByMonths(year)),
+		setSortingByDays: (year, month) => dispatch(sortDataByDays(year, month)),
 	};
 };
 

@@ -7,9 +7,11 @@ import './Select.css';
 const cnSelect = cn('select');
 
 export default function Select(props) {
-	const { options } = props;
-	const { className } = props;
-	const { onClick } = props;
+	const {
+		options,
+		className,
+		onClick,
+	} = props;
 	
 	return (
 		<select className={cnSelect({}, [className])} onClick={onClick}>

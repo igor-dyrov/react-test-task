@@ -11,7 +11,7 @@ const months = [
 	},
 	{
 		name: 'February',
-		numOfDays: 28 //simplify
+		numOfDays: 28 // simplify
 	}, {
 		name: 'March',
 		numOfDays: 31
@@ -33,7 +33,8 @@ const months = [
 	}, {
 		name: 'August',
 		numOfDays: 31
-	}, {
+	},
+	{
 		name: 'September',
 		numOfDays: 30
 	},

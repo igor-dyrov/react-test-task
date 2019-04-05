@@ -12,7 +12,7 @@ export default function Button(props) {
 	const { target } = props;
 	
 	return (
-		<TagName className={cnButton({}, [className])} href={href} onClick={onClick} target={ target }>
+		<TagName className={cnButton({}, [className])} href={href} onClick={onClick} target={target}>
 			{children}
 		</TagName>
 	);
