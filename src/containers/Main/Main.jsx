@@ -18,12 +18,12 @@ import {
 } from '../../redux/graph/graph.action.js';
 
 import {
-	getMonths,
-	getBarData,
-	getYears,
-	getMode,
-	getSelectedMonth,
-	getSelectedYear
+	makeGetMonths,
+	makeGetBarData,
+	makeGetYears,
+	makeGetMode,
+	makeGetSelectedMonth,
+	makeGetSelectedYear
 } from '../../redux/graph/graph.selector.js';
 
 import { yearSelectorIsVisible, monthSelectorIsVisible } from './main.selector.js';
@@ -64,7 +64,7 @@ class Main extends React.Component {
 			setSortingByYears();
 		}
 	};
-
+	
 	handleYearSelecting = (event) => {
 		const {
 			setSortingByMonths,
@@ -77,7 +77,7 @@ class Main extends React.Component {
 			setSortingByMonths(+event.target.value);
 		}
 	};
-
+	
 	handleMonthSelecting = (event) => {
 		const {
 			setSortingByDays,
@@ -85,7 +85,7 @@ class Main extends React.Component {
 		} = this.props;
 		setSortingByDays(+selectedYear, event.target.value);
 	};
-
+	
 	render() {
 		const {
 			barData,
@@ -144,14 +144,23 @@ Main.propTypes = {
 	selectedMonth: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => {
-	return {
-		barData: getBarData(state),
-		months: getMonths(state),
-		years: getYears(state),
-		mode: getMode(state),
-		selectedYear: getSelectedYear(state),
-		selectedMonth: getSelectedMonth(state),
+const makeStateToProps = () => {
+	const getBarData = makeGetBarData();
+	const getMonths = makeGetMonths();
+	const getYears = makeGetYears();
+	const getMode = makeGetMode();
+	const getSelectedMonth = makeGetSelectedMonth();
+	const getSelectedYear = makeGetSelectedYear();
+	
+	return (state) => {
+		return {
+			barData: getBarData(state),
+			months: getMonths(state),
+			years: getYears(state),
+			mode: getMode(state),
+			selectedYear: getSelectedYear(state),
+			selectedMonth: getSelectedMonth(state),
+		};
 	};
 };
 
@@ -164,4 +173,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(makeStateToProps(), mapDispatchToProps)(Main);

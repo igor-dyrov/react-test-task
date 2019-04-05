@@ -8,7 +8,7 @@ a,a:visited,a:hover,a:active{
     font-size: 25px;
 }
 a:hover{
-    color:#d73444;
+    color:#522580;
 }
 a.before:before,a.after:after{
     content: "";
@@ -19,7 +19,7 @@ a.before:before,a.after:after{
 }
 a.before:before,a.after:after{
     width:0;
-    background:#d73444;
+    background:#522580;
 }
 
 a {
